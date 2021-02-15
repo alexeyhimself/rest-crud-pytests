@@ -219,7 +219,7 @@ def test_fails_to_update_bear_id_to_already_by_used_id_sending_whole_invalid_upd
 
 
 # @pytest.mark.d
-def test_fails_to_update_bear_with_empty_dict(valid_bear, cleanup):
+def test_fails_to_update_bear_with_empty_dict(valid_bear):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   assert r1.status_code == 200
   bear_id1 = r1.text
@@ -228,7 +228,7 @@ def test_fails_to_update_bear_with_empty_dict(valid_bear, cleanup):
 
 
 # @pytest.mark.d
-def test_fails_to_update_bear_with_dict_with_unknown_parameters(valid_bear, cleanup):
+def test_fails_to_update_bear_with_dict_with_unknown_parameters(valid_bear):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   assert r1.status_code == 200
   bear_id1 = r1.text
