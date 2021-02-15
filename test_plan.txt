@@ -1,0 +1,36 @@
+Service Verification Test Plan
+All the verifications are already sorted in the priority of execution from Highest to Lowest. 
+One can stop test execution at any time at any stage if one have no resources (time, env, engineers) to continue. But will see the risks of other (missed) verifications.
+
+
+A. Preconditions (Installation):
+  1. Docker image azshoo/alaska tag 1.0 could be successfully pulled from DockerHub
+  2. Docker container azshoo/alaska:1.0 successfully starts
+
+B. Post-Deployment Verification (PDV):
+  3. Service responds with instruction text for HTTP GET request on http://0.0.0.0:8091 (run PDV autotest with 'pdv' marker)
+
+C. Testing (Functional):
+  4. All available autotests have PASSED status (skipped tests, if any, are acknowledged)
+    * Run tests for empty system ('run_on_empty' marker)
+    * Run smoke tests ('smoke' marker)
+    * Run other non-SLOW tests ('not slow and not smoke and not run_on_empty' marker)
+    * Run SLOW tests ('slow' marker)
+  5. All available manual tests have PASSED status (skipped tests, if any, are acknowledged)
+  6. Log messages during and after automatic and manual test executions have no CRIT and ERROR records (WARNING messages, if any, are acknowledged)
+  7. Container RAM and CPU usage are about the same before and after tests
+
+D. Testing (Performance (Load)) (could be started on a separate env right after PDV):
+  8. Service does not crash during 24h load test
+    * Container RAM and CPU usage are about the same before and after several hours (24h) of load testing
+    * Log messages have no CRIT and ERROR records (WARNING messages, if any, are acknowledged)
+    * Disk space consumption during load tests is acceptable (logs rotation, temp and system files, etc.)
+  9. Testing (Performance (Timings for clean))
+    * Response timings are about the same in the end of rump-up period and at the end of load testing (no system degradation over test lifetime)
+    * Response timings are about the same as in previous runs (if any exist)
+  10. Testing (Performance (Timings for loaded))
+    * Response timings for every HTTP method on system with lots of records are acceptable
+    * Response timings for every HTTP method on system with lots of records are about the same as in previous runs (if any exist)
+
+E. Test Report
+  11. Test Report is published and available for the team and concerned managers
