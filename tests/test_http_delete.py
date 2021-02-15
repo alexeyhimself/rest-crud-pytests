@@ -36,7 +36,18 @@ def test_successfully_deletes_existing_bear_by_id(valid_bear):
   r3 = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
   assert r3.status_code == 200  # will be set to 404 when get will be fixed
 
-# del by id that not exists
+
+# @pytest.mark.d
+@pytest.mark.delete
+@pytest.mark.smoke
+def test_successfully_deletes_bear_by_id_that_does_not_exist(valid_bear):
+  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
+  bear_id = r1.text
+  r2 = requests.delete(SERVICE_URL + "/" + str(bear_id), timeout=T)
+  assert r2.status_code == 200
+  r3 = requests.delete(SERVICE_URL + "/" + str(bear_id), timeout=T)  # once again same id
+  assert r2.status_code == 200
+
 
 # @pytest.mark.d
 @pytest.mark.performance
