@@ -2,7 +2,7 @@ import pytest
 import requests
 import json
 
-from conftest import T, SERVICE_URL, BEAR_DEFAULT_PARAMS
+from conftest import T, SERVICE_URL
 
 from conftest import VALID_BEAR_NAMES, VALID_BEAR_AGES, VALID_BEAR_TYPES
 from conftest import INVALID_BEAR_NAMES, INVALID_BEAR_AGES, INVALID_BEAR_TYPES
@@ -88,7 +88,7 @@ def test_fails_to_update_bear_unknown_parameter_sending_only_that_invalid_param(
 
 
 # @pytest.mark.d
-def test_fails_to_update_bear_id_to_new_free_id_sending_only_that_param(valid_bear):
+def test_fails_to_update_bear_id_to_free_id_by_sending_only_that_param(valid_bear):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   assert r1.status_code == 200
   bear_id1 = r1.text
@@ -103,7 +103,7 @@ def test_fails_to_update_bear_id_to_new_free_id_sending_only_that_param(valid_be
 
 
 # @pytest.mark.d
-def test_fails_to_update_bear_id_to_new_already_used_id_sending_only_that_param(valid_bear):
+def test_fails_to_update_bear_id_to_already_by_used_id_sending_only_that_param(valid_bear):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   assert r1.status_code == 200
   bear_id1 = r1.text
@@ -189,7 +189,7 @@ def test_fails_to_update_bear_age_by_sending_whole_invalid_updated_bear(valid_be
 
 
 # @pytest.mark.d
-def test_fails_to_update_bear_id_to_new_free_id_sending_whole_invalid_updated_bear(valid_bear):
+def test_fails_to_update_bear_id_to_free_id_by_sending_whole_invalid_updated_bear(valid_bear):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   assert r1.status_code == 200
   bear_id1 = r1.text
@@ -201,11 +201,11 @@ def test_fails_to_update_bear_id_to_new_free_id_sending_whole_invalid_updated_be
   valid_bear["bear_id"] = bear_id1  # making bear id invalid
   invalid_bear = valid_bear
   r4 = requests.put(SERVICE_URL + "/" + str(bear_id2), data=json.dumps(invalid_bear), timeout=T)
-  assert r2.status_code == 400
+  assert r2.status_code == 400  # must be HTTP 400 Bad Request
 
 
 # @pytest.mark.d
-def test_fails_to_update_bear_id_to_new_already_used_id_sending_whole_invalid_updated_bear(valid_bear):
+def test_fails_to_update_bear_id_to_already_by_used_id_sending_whole_invalid_updated_bear(valid_bear):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   assert r1.status_code == 200
   bear_id1 = r1.text
@@ -215,7 +215,26 @@ def test_fails_to_update_bear_id_to_new_already_used_id_sending_whole_invalid_up
   valid_bear["bear_id"] = bear_id1  # making bear id invalid
   invalid_bear = valid_bear
   r4 = requests.put(SERVICE_URL + "/" + str(bear_id2), data=json.dumps(invalid_bear), timeout=T)
-  assert r2.status_code == 400
+  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+
+
+# @pytest.mark.d
+def test_fails_to_update_bear_with_empty_dict(valid_bear, cleanup):
+  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
+  assert r1.status_code == 200
+  bear_id1 = r1.text
+  r2 = requests.post(SERVICE_URL, data=json.dumps({}), timeout=T)
+  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+
+
+# @pytest.mark.d
+def test_fails_to_update_bear_with_dict_with_unknown_parameters(valid_bear, cleanup):
+  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
+  assert r1.status_code == 200
+  bear_id1 = r1.text
+  r2 = requests.post(SERVICE_URL, data=json.dumps({"unknown": "param"}), timeout=T)
+  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+
 ###
 
 """

@@ -6,6 +6,7 @@ import json
 from conftest import SERVICE_URL, T, T_MAX_FOR_LOAD_TEST, A_LOT
 
 
+# @pytest.mark.d
 @pytest.mark.delete
 @pytest.mark.run_on_empty
 def test_successfully_deletes_all_when_no_bears():

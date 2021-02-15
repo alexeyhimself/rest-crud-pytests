@@ -136,3 +136,9 @@ def flush_with_data(valid_bear):
       t.join()
 
   return flush
+
+
+# for development and debug purposes
+@pytest.fixture
+def cleanup():
+  r = requests.delete(SERVICE_URL, timeout=T)
