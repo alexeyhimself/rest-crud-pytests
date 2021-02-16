@@ -21,7 +21,6 @@ import pytest
 import requests
 import json
 import time
-import sys
 
 from conftest import SERVICE_URL, T, T_MAX_FOR_LOAD_TEST, A_LOT
 from conftest import INVALID_IDS
