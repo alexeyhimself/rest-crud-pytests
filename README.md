@@ -16,7 +16,7 @@ File `test_plan.txt` contains the plan on how to test REST CRUD service. Part of
 ```
 # pull and run tested application
 docker pull azshoo/alaska:1.0
-docker run -d -p 8091:8091 --rm azshoo/alaska:1.0
+docker run -d -p 8091:8091 --name alaska --rm azshoo/alaska:1.0
 ```
 ### Get tests and get them ready:
 ```
