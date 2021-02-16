@@ -27,8 +27,7 @@ from conftest import INVALID_IDS
 
 
 # @pytest.mark.d
-@pytest.mark.run_on_empty
-def test_successfully_reads_all_bears_when_bears_not_exist():
+def test_successfully_reads_all_bears_when_bears_not_exist(cleanup):
   r = requests.get(SERVICE_URL, timeout=T)
   assert r.status_code == 200
   bears = json.loads(r.text)
