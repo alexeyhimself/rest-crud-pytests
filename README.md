@@ -31,7 +31,10 @@ source bin/activate
 # install required python libs
 pip3 install -r install/requirements.txt
 ```
-
+### View docker container logs
+```
+docker logs alaska -f
+```
 ### Run PDV tests
 To make sure that everything is ready for test execution, run Post-Deployment Verification (PDV) tests. To do so in `rest-crud-pytests` folder run:
 ```
