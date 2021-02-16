@@ -42,9 +42,8 @@ All tests must get `PASSED` status
 ### Run ALL the tests
 When PDV tests passed, then you can run all the other tests. To do so in `rest-crud-pytests` folder run:
 ```
-pytest -v -m run_on_empty
 pytest -v -m smoke
-pytest -v -m 'not slow and not smoke and not run_on_empty'
+pytest -v -m 'not slow and not smoke'
 pytest -v -m slow
 ```
 All tests must get `PASSED` status

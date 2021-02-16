@@ -19,3 +19,10 @@ def test_info_page_is_displayed():
   r = requests.get(URL + '/info', timeout=T)
   assert r.status_code == 200
   assert len(r.text) > 0
+
+
+# @pytest.mark.d
+@pytest.mark.pdv
+def test_delete_all_works_when_no_bears():
+  r = requests.delete(SERVICE_URL, timeout=T)
+  assert r.status_code == 200

@@ -10,13 +10,13 @@ A. Preconditions (Installation):
   2. Docker container azshoo/alaska:1.0 successfully starts
 
 B. Post-Deployment Verification (PDV):
-  3. Service responds with instruction text for HTTP GET request on http://0.0.0.0:8091 (run PDV autotest with 'pdv' marker)
+  3. Service responds with instruction text for HTTP GET request on http://0.0.0.0:8091, very basic functions (cleanup) work
+    * Run PDV tests ('pdv' marker)
 
 C. Testing (Functional):
   4. All available autotests have PASSED status (skipped tests, if any, are acknowledged)
-    * Run tests for empty system ('run_on_empty' marker)
     * Run smoke tests ('smoke' marker)
-    * Run other non-SLOW tests ('not slow and not smoke and not run_on_empty' marker)
+    * Run other non-SLOW tests ('not slow and not smoke' marker)
     * Run SLOW tests ('slow' marker)
   5. All available manual tests have PASSED status (skipped tests, if any, are acknowledged)
   6. Log messages during and after automatic and manual test executions have no CRIT and ERROR records (WARNING messages, if any, are acknowledged)
