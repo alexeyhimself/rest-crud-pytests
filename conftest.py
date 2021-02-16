@@ -93,7 +93,7 @@ INVALID_IDS = [
   0,                      # special value
   True,                   # Python special value
   False,                  # Python special value
-  sys.maxsize + 1         # pretends to be out-of-range number
+  sys.maxsize + 1,        # pretends to be out-of-range number
   "1;DROP bears;--"       # SQL injection
 ]
 
