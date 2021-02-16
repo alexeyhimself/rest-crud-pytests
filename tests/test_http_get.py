@@ -1,3 +1,22 @@
+"""
+
+  Tests in this file
+
+  Reads without ID:
+    * Read when no bears in system works: test_successfully_reads_all_bears_when_bears_not_exist
+    * Read when 2+ bears in system works: test_successfully_reads_all_bears_when_bears_exist
+    * Read when A LOT bears in system works: test_successfully_reads_all_bears_when_a_lot_bears_exist
+
+  Reads with ID:
+    * Read bear by valid existing ID works: test_successfully_reads_existing_bear_by_id
+    * Read bear by valid non-existing ID works: test_fails_to_read_bear_by_valid_id_that_does_not_exist
+    * Read bear by various invalid IDs works: test_fails_to_read_bear_by_invalid_id
+
+  Data consistency:
+    * Read returns what was Created: test_read_json_is_the_same_as_post_json
+
+"""
+
 import pytest
 import requests
 import json
@@ -53,15 +72,14 @@ def test_fails_to_read_bear_by_invalid_id(invalid_id):
 
 
 # @pytest.mark.d
-def test_fails_to_read_bear_by_large_out_of_range_id():
-  r = requests.get(SERVICE_URL + "/" + str(sys.maxsize + 1), timeout=T)
-  assert r.status_code == 404
-
-
-# @pytest.mark.d
-def test_fails_to_read_bear_by_valid_id_that_does_not_exist():
-  r = requests.get(SERVICE_URL + "/" + str(sys.maxsize - 1), timeout=T)
-  assert r.status_code == 404
+def test_fails_to_read_bear_by_valid_id_that_does_not_exist(valid_bear):
+  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
+  assert r1.status_code == 200
+  bear_id = r1.text
+  r2 = requests.delete(SERVICE_URL + "/" + str(bear_id), timeout=T)
+  assert r2.status_code == 200
+  r3 = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
+  assert r3.status_code == 404
 
 
 # @pytest.mark.d

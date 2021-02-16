@@ -1,9 +1,24 @@
+"""
+
+  Tests in this file
+
+  * Delete when no bears in system works: test_successfully_deletes_all_when_no_bears
+  * Delete when 2+ bears in system works: test_successfully_deletes_all_existing_bears
+  * Delete when A LOT bears in system works: test_successfully_deletes_all_bears_when_a_lot_bears_exist
+
+  * Delete bear by valid existing ID works: test_successfully_deletes_existing_bear_by_id
+  * Delete bear by valid non-existing ID works: test_successfully_deletes_bear_by_id_that_does_not_exist
+  * Delete bear by various invalid IDs works: test_fails_to_delete_bear_by_invalid_id
+
+"""
+
 import pytest
 import requests
 import time
 import json
 
 from conftest import SERVICE_URL, T, T_MAX_FOR_LOAD_TEST, A_LOT
+from conftest import INVALID_IDS
 
 
 # @pytest.mark.d
@@ -40,7 +55,6 @@ def test_successfully_deletes_existing_bear_by_id(valid_bear):
 
 # @pytest.mark.d
 @pytest.mark.delete
-@pytest.mark.smoke
 def test_successfully_deletes_bear_by_id_that_does_not_exist(valid_bear):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   bear_id = r1.text
@@ -48,6 +62,13 @@ def test_successfully_deletes_bear_by_id_that_does_not_exist(valid_bear):
   assert r2.status_code == 200
   r3 = requests.delete(SERVICE_URL + "/" + str(bear_id), timeout=T)  # once again same id
   assert r2.status_code == 200
+
+
+# @pytest.mark.d
+@pytest.mark.parametrize("invalid_id", INVALID_IDS)
+def test_fails_to_delete_bear_by_invalid_id(invalid_id):
+  r = requests.delete(SERVICE_URL + "/" + str(invalid_id), timeout=T)
+  assert r.status_code == 400
 
 
 # @pytest.mark.d

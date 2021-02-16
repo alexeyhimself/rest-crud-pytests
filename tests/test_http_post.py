@@ -1,3 +1,26 @@
+"""
+
+  Tests in this file
+
+  Positive:
+    * Create valid bear works: test_successfully_creates_valid_bear
+    * Create duplicate bear works: test_successfully_creates_duplicate_valid_bear
+    * Create bear with each valid bear_type works: test_successfully_creates_bear_with_valid_bear_type
+    * Create bear with each valid bear_name works: test_successfully_creates_bear_with_valid_bear_name
+    * Create bear with each valid bear_age works: test_successfully_creates_bear_with_valid_bear_age
+    * Create valid bear with unknown parameter works: test_successfully_creates_bear_with_valid_params_and_unknown_param
+
+  Conditionally-negative:
+    * Create bear with various invalid bear_types does not work: test_fails_to_create_bear_with_invalid_bear_type
+    * Create bear with various invalid bear_names does not work: test_fails_to_create_bear_with_invalid_bear_name
+    * Create bear with various invalid bear_ages does not work: test_fails_to_create_bear_with_invalid_bear_age
+
+    * Create bear without any one of default parameters does not work: test_fails_to_create_bear_without_any_default_param
+    * Create bear with invalid payload format does not work: test_fails_to_create_bear_with_broken_format_data_param
+    * Create bear with valid format but invalid set does not work: test_fails_to_create_bear_with_only_unknown_param
+
+"""
+
 import pytest
 import requests
 import json
@@ -5,6 +28,7 @@ import json
 from conftest import SERVICE_URL, T, BEAR_DEFAULT_PARAMS
 from conftest import VALID_BEAR_NAMES, VALID_BEAR_AGES, VALID_BEAR_TYPES
 from conftest import INVALID_BEAR_NAMES, INVALID_BEAR_AGES, INVALID_BEAR_TYPES
+from conftest import INVALID_DATASET
 
 
 # @pytest.mark.d
@@ -99,8 +123,9 @@ def test_fails_to_create_bear_without_any_default_param(valid_bear, default_para
 
 
 # @pytest.mark.d
-def test_fails_to_create_bear_without_any_params():
-  r = requests.post(SERVICE_URL, data="{}", timeout=T)
+@pytest.mark.parametrize("invalid_data", INVALID_DATASET)
+def test_fails_to_create_bear_with_broken_format_data_param(invalid_data):
+  r = requests.post(SERVICE_URL, data=invalid_data, timeout=T)
   assert r.status_code == 400  # must be HTTP 400 Bad Request
 
 

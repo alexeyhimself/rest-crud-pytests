@@ -1,3 +1,58 @@
+"""
+
+  Tests in this file
+
+  Sending only a part of data in update:
+    Valid part:
+      * Update bear's name by sending only that valid param in payload works: 
+        test_successfully_updates_bear_name_by_sending_only_that_valid_param
+      * Update bear's type by sending only that valid param in payload works: 
+        test_successfully_updates_bear_type_by_sending_only_that_valid_param
+      * Update bear's age by sending only that valid param in payload works: 
+        test_successfully_updates_bear_age_by_sending_only_that_valid_param
+
+    Invalid part:
+      * Update bear's name by sending only that various invalid params in payload does not work:
+        test_fails_to_update_bear_name_by_sending_only_that_invalid_param
+      * Update bear's type by sending only that various invalid params in payload does not work: 
+        test_fails_to_update_bear_type_by_sending_only_that_invalid_param
+      * Update bear's age by sending only that various invalid params in payload does not work:
+        test_fails_to_update_bear_age_by_sending_only_that_invalid_param
+      * Update bear's id to a new free id sending only that param in payload does not work:
+        test_fails_to_update_bear_id_to_free_id_by_sending_only_that_param
+      * Update bear's id to existing id sending only that param in payload does not work:
+        test_fails_to_update_bear_id_to_already_by_used_id_sending_only_that_param
+    
+  Sending whole new bear in update:
+    Valid whole:
+      * Update bear's name by sending whole new valid bear in payload works:
+        test_successfully_updates_bear_name_by_sending_whole_valid_updated_bear
+      * Update bear's type by sending whole new valid bear in payload works:
+        test_successfully_updates_bear_type_by_sending_whole_valid_updated_bear
+      * Update bear's age by sending whole new valid bear in payload works:
+        test_successfully_updates_bear_age_by_sending_whole_valid_updated_bear
+
+    Invalid whole:
+      * Update bear's name by sending whole new valid bear in payload does not work:
+        test_fails_to_update_bear_name_by_sending_whole_invalid_updated_bear
+      * Update bear's type by sending whole new valid bear in payload does not work:
+        test_fails_to_update_bear_type_by_sending_whole_invalid_updated_bear
+      * Update bear's age by sending whole new valid bear in payload does not work:
+        test_fails_to_update_bear_age_by_sending_whole_invalid_updated_bear
+      * Update bear's id to a new free id sending whole new valid bear in payload does not work:
+        test_fails_to_update_bear_id_to_free_id_by_sending_whole_invalid_updated_bear
+      * Update bear's id to existing id sending whole new valid bear in payload does not work:
+        test_fails_to_update_bear_id_to_already_by_used_id_sending_whole_invalid_updated_bear
+
+  Sending broken payload:
+    * Update bear's unknown parameter sending only that param in payload does not work:
+      test_fails_to_update_bear_unknown_parameter_sending_only_that_invalid_param
+    (test case for sending whole new bear with unknown parameter has no sence)
+    * Update bear with invalid payload format does not work:
+      test_fails_to_update_bear_with_broken_format_data_param
+
+"""
+
 import pytest
 import requests
 import json
@@ -6,6 +61,7 @@ from conftest import T, SERVICE_URL
 
 from conftest import VALID_BEAR_NAMES, VALID_BEAR_AGES, VALID_BEAR_TYPES
 from conftest import INVALID_BEAR_NAMES, INVALID_BEAR_AGES, INVALID_BEAR_TYPES
+from conftest import INVALID_DATASET
 
 
 #
@@ -219,33 +275,10 @@ def test_fails_to_update_bear_id_to_already_by_used_id_sending_whole_invalid_upd
 
 
 # @pytest.mark.d
-def test_fails_to_update_bear_with_empty_dict(valid_bear):
+@pytest.mark.parametrize("invalid_data", INVALID_DATASET)
+def test_fails_to_update_bear_with_broken_format_data_param(valid_bear, invalid_data):
   r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
   assert r1.status_code == 200
   bear_id1 = r1.text
-  r2 = requests.post(SERVICE_URL, data=json.dumps({}), timeout=T)
+  r2 = requests.put(SERVICE_URL + "/" + str(bear_id1), data=invalid_data, timeout=T)
   assert r2.status_code == 400  # must be HTTP 400 Bad Request
-
-
-# @pytest.mark.d
-def test_fails_to_update_bear_with_dict_with_unknown_parameters(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id1 = r1.text
-  r2 = requests.post(SERVICE_URL, data=json.dumps({"unknown": "param"}), timeout=T)
-  assert r2.status_code == 400  # must be HTTP 400 Bad Request
-
-###
-
-"""
-update only 1 param by sending 1 param (for each param) (with valid/invalid data)
-update only 1 param by sending all bear (for each param) (with valid/invalid data)
-update not existing param
-update bear_id by 1 param
-update bear_id by whole bear
-update bear_id by whole bear try overwrite
-
-update bear to make it duplicate
-update {}
-update {not exists}
-"""

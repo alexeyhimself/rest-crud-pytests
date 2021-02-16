@@ -1,3 +1,12 @@
+"""
+
+  Tests in this file
+
+  Post-Deployment Verification:
+    * /info page is displayed when service works: test_info_page_is_displayed
+
+"""
+
 import pytest
 import requests
 
