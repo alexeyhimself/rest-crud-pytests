@@ -37,7 +37,7 @@ In `rest-crud-pytests` folder run:
 ```
 pytest -v -m pdv
 ```
-All tests must get PASSED status
+All tests must get `PASSED` status
 
 ### Run other tests
 In `rest-crud-pytests` folder run:
@@ -47,7 +47,7 @@ pytest -v -m smoke
 pytest -v -m 'not slow and not smoke and not run_on_empty'
 pytest -v -m slow
 ```
-All tests must get PASSED status
+All tests must get `PASSED` status
 
 ## Reports
 If you don't want to run tests then you can look at the `rest-crud-pytests/reports` folder. It contains reports from last local run:
