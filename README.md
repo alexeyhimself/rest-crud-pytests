@@ -17,6 +17,9 @@ File `test_plan.txt` contains the plan on how to test REST CRUD service. Part of
 # pull and run tested application
 docker pull azshoo/alaska:1.0
 docker run -d -p 8091:8091 --name alaska --rm azshoo/alaska:1.0
+
+# view docker container logs
+docker logs alaska -f
 ```
 ### Get tests and get them ready:
 ```
@@ -30,10 +33,6 @@ source bin/activate
 
 # install required python libs
 pip3 install -r install/requirements.txt
-```
-### View docker container logs
-```
-docker logs alaska -f
 ```
 ### Run PDV tests
 To make sure that everything is ready for test execution, run Post-Deployment Verification (PDV) tests. To do so in `rest-crud-pytests` folder run:
@@ -57,10 +56,9 @@ If you don't want to run tests then you can look at the `rest-crud-pytests/repor
 * `report_logs.txt` - contains short cuts from logs for `WARN` and `ERR` messages in tested app logs during test runs
 
 ### Overall tests report is the following:
-* `pdv`: 1 passed
-* `run_on_empty`: 2 passed
+* `pdv`: 2 passed
 * `smoke`: 5 passed
-* `not slow and not smoke and not run_on_empty`: 150 failed, 28 passed
+* `not slow and not smoke`: 150 failed, 29 passed
 * `slow`: 2 passed
 
 ### Overall logs report is the following:
