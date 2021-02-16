@@ -39,7 +39,7 @@ pytest -v -m pdv
 ```
 All tests must get `PASSED` status
 
-### Run other tests
+### Run ALL the tests
 In `rest-crud-pytests` folder run:
 ```
 pytest -v -m run_on_empty
