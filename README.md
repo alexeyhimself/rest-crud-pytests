@@ -33,14 +33,14 @@ pip3 install -r install/requirements.txt
 ```
 
 ### Run PDV tests
-In `rest-crud-pytests` folder run:
+To make sure that everything is ready for test execution, run Post-Deployment Verification (PDV) tests. To do so in `rest-crud-pytests` folder run:
 ```
 pytest -v -m pdv
 ```
 All tests must get `PASSED` status
 
 ### Run ALL the tests
-In `rest-crud-pytests` folder run:
+When PDV tests passed, then you can run all the other tests. To do so in `rest-crud-pytests` folder run:
 ```
 pytest -v -m run_on_empty
 pytest -v -m smoke
