@@ -14,7 +14,7 @@ FINE_LENGTH_OF_BEAR_NAME = 10
 BEAR_AGES = range(0, 51)  # in average 25, but 50 is a maximum lifetime expectancy for bears in captivity (except GUMMY)
 T_MAX_FOR_LOAD_TEST = 1   # [seconds], maximum time to wait for high load
 T = 5                     # [seconds], timeout for requests
-A_LOT = 1000              # minimum number of bear records to expect in "flush a lot" tests
+A_LOT = 10000             # minimum number of bear records to expect in "flush a lot" tests
 A_FEW = 10                # minimum number of bear records to expect in "flush a few" tests
 
 
