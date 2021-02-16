@@ -3,5 +3,4 @@ include
 lib
 share
 pyvenv.cfg
-
 *.pyc
