@@ -15,6 +15,9 @@
   Data consistency:
     * Read returns what was Created: test_read_json_is_the_same_as_post_json
 
+  Other:
+    * HTTP 404 is displayed when try to open unknown URL path: test_gets_404_when_open_page_that_does_not_exist
+
 """
 
 import pytest
@@ -23,7 +26,13 @@ import json
 import time
 
 from conftest import SERVICE_URL, T, T_MAX_FOR_LOAD_TEST, A_LOT, A_FEW
-from conftest import INVALID_IDS
+from conftest import INVALID_IDS, URL
+
+
+# @pytest.mark.d
+def test_gets_404_when_open_page_that_does_not_exist(cleanup):
+  r = requests.get(URL + "/unknown", timeout=T)
+  assert r.status_code == 404
 
 
 # @pytest.mark.d
