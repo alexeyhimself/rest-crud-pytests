@@ -22,7 +22,7 @@ import requests
 import json
 import time
 
-from conftest import SERVICE_URL, T, T_MAX_FOR_LOAD_TEST, A_LOT
+from conftest import SERVICE_URL, T, T_MAX_FOR_LOAD_TEST, A_LOT, A_FEW
 from conftest import INVALID_IDS
 
 
@@ -36,13 +36,13 @@ def test_successfully_reads_all_bears_when_bears_not_exist(cleanup):
 
 # @pytest.mark.d
 @pytest.mark.smoke
-def test_successfully_reads_all_bears_when_bears_exist(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
+def test_successfully_reads_all_bears_when_bears_exist(valid_bear, flush_with_data):
+  flush_with_data(valid_bear)
   r2 = requests.get(SERVICE_URL, timeout=T)
   assert r2.status_code == 200
   bears = json.loads(r2.text)
   assert isinstance(bears, list) == True
-  assert len(bears) >= 1
+  assert len(bears) >= A_FEW
 
 
 # @pytest.mark.d
