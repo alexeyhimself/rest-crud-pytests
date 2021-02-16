@@ -1,0 +1,200 @@
+# grep "WARN" app.log >> report_logs.txt
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+[WARN ] 2021-02-16 09:28:28.077 AbstractConnector - Ignoring deprecated socket close linger time
+[WARN ] 2021-02-16 09:28:28.082 AbstractConnector - Ignoring deprecated socket close linger time
+
+
+# grep "ERR" -A 2 app.log >> report_logs.txt
+[ERROR] 2021-02-16 09:33:05.728 GeneralError - 
+com.google.gson.JsonSyntaxException: Expected a com.google.gson.JsonObject but was com.google.gson.JsonPrimitive
+	at com.google.gson.internal.bind.TypeAdapters$35$1.read(TypeAdapters.java:897) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:05.979 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:06.047 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:06.117 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:06.180 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:06.240 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:07.781 GeneralError - 
+java.lang.UnsupportedOperationException: JsonNull
+	at com.google.gson.JsonElement.getAsString(JsonElement.java:192) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.068 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.206 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.267 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.327 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.397 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.457 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.512 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.564 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.626 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.689 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.763 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.821 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.875 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.929 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:09.983 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.031 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.098 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.168 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.216 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.275 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.612 GeneralError - 
+java.lang.UnsupportedOperationException: JsonNull
+	at com.google.gson.JsonElement.getAsString(JsonElement.java:192) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.881 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:10.935 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:11.031 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:11.115 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:11.170 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:11.224 GeneralError - 
+java.lang.NullPointerException: null
+	at ai.tra.qa.alaska.route.crud.BearUpdate.handle(BearUpdate.java:21) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:11.764 GeneralError - 
+com.google.gson.JsonSyntaxException: Expected a com.google.gson.JsonObject but was com.google.gson.JsonPrimitive
+	at com.google.gson.internal.bind.TypeAdapters$35$1.read(TypeAdapters.java:897) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:12.193 GeneralError - 
+java.lang.NumberFormatException: For input string: "false"
+	at jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.222 GeneralError - 
+java.lang.NumberFormatException: For input string: "true"
+	at jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.259 GeneralError - 
+java.lang.UnsupportedOperationException: JsonNull
+	at com.google.gson.JsonElement.getAsDouble(JsonElement.java:205) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:12.291 GeneralError - 
+java.lang.NumberFormatException: For input string: "age"
+	at jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2054) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.327 GeneralError - 
+java.lang.NumberFormatException: empty String
+	at jdk.internal.math.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1842) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.516 GeneralError - 
+java.lang.UnsupportedOperationException: JsonNull
+	at com.google.gson.JsonElement.getAsString(JsonElement.java:192) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:12.600 GeneralError - 
+java.lang.IllegalArgumentException: No enum constant ai.tra.qa.alaska.model.BearType.false
+	at java.lang.Enum.valueOf(Enum.java:264) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.635 GeneralError - 
+java.lang.IllegalArgumentException: No enum constant ai.tra.qa.alaska.model.BearType.true
+	at java.lang.Enum.valueOf(Enum.java:264) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.666 GeneralError - 
+java.lang.IllegalArgumentException: No enum constant ai.tra.qa.alaska.model.BearType.0
+	at java.lang.Enum.valueOf(Enum.java:264) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.697 GeneralError - 
+java.lang.UnsupportedOperationException: JsonNull
+	at com.google.gson.JsonElement.getAsString(JsonElement.java:192) ~[alaska1.0.jar:?]
+--
+[ERROR] 2021-02-16 09:33:12.722 GeneralError - 
+java.lang.IllegalArgumentException: No enum constant ai.tra.qa.alaska.model.BearType.
+		at java.lang.Enum.valueOf(Enum.java:264) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.755 GeneralError - 
+java.lang.IllegalArgumentException: No enum constant ai.tra.qa.alaska.model.BearType.black
+	at java.lang.Enum.valueOf(Enum.java:264) ~[?:?]
+--
+[ERROR] 2021-02-16 09:33:12.786 GeneralError - 
+java.lang.IllegalArgumentException: No enum constant ai.tra.qa.alaska.model.BearType.WHITE
+	at java.lang.Enum.valueOf(Enum.java:264) ~[?:?]
+
+# grep "CRIT" -A 2 app.log >> report_logs.txt
