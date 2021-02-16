@@ -5,6 +5,7 @@ import string
 import json
 import threading
 import time
+import sys
 
 
 URL = "http://0.0.0.0:8091"
@@ -82,14 +83,27 @@ INVALID_BEAR_TYPES = [
 
 INVALID_IDS = [
   "",                     # empty string
-  "a",                    # not a number
+  "word",                 # not a number
   -1,                     # negative number
   1.9,                    # float number
   "1,2",                  # several numbers at a time
   None,                   # Python special value
   0,                      # special value
   True,                   # Python special value
-  False                   # Python special value
+  False,                  # Python special value
+  sys.maxsize + 1         # pretends to be out-of-range number
+]
+
+INVALID_DATASET = [
+  {},                     # empty dict
+  json.dumps({}),         # empty as valid payload
+  [],                     # not a dict
+  None,                   # not a dict, Python special value
+  # True,                 # not a dict, boolean to agree (requests can't send, so disabled)
+  False,                  # not a dict, boolean to disagree
+  "word",                 # not a dict
+  # 1,                    # not a dict, integer (requests can't send, so disabled)
+  0                       # not a dict, special value
 ]
 
 
