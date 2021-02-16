@@ -16,7 +16,7 @@ File `test_plan.txt` contains the plan on how to test REST CRUD service. Part of
 ```
 # pull and run tested application
 docker pull azshoo/alaska:1.0
-docker run -p 8091:8091 --rm azshoo/alaska:1.0
+docker run -d -p 8091:8091 --rm azshoo/alaska:1.0
 ```
 ### Get tests and get them ready:
 ```
@@ -63,3 +63,9 @@ If you don't want to run tests then you can look at the `rest-crud-pytests/repor
 ### Overall logs report is the following:
 * `WARNING` - 2 unique log messages
 * `ERROR` - 12 unique log messages
+
+## Finish testing
+To stop running container of tested app run:
+```
+docker stop alaska
+```
