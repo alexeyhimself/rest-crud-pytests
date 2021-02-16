@@ -45,7 +45,7 @@ All tests must get `PASSED` status
 When PDV tests passed, then you can run all the other tests. To do so in `rest-crud-pytests` folder run:
 ```
 pytest -v -m smoke
-pytest -v -m 'not slow and not smoke'
+pytest -v -m 'not slow and not smoke and not pdv'
 pytest -v -m slow
 ```
 All tests must get `PASSED` status
@@ -58,7 +58,7 @@ If you don't want to run tests then you can look at the `rest-crud-pytests/repor
 ### Overall tests report is the following:
 * `pdv`: 2 passed
 * `smoke`: 5 passed
-* `not slow and not smoke`: 150 failed, 29 passed
+* `not slow and not smoke and not pdv`: 159 failed, 32 passed
 * `slow`: 2 passed
 
 ### Overall logs report is the following:
