@@ -4,6 +4,7 @@
 
   Post-Deployment Verification:
     * /info page is displayed when service works: test_info_page_is_displayed
+    * Delete (even when no bears in system) works: test_delete_all_works_when_no_bears
 
 """
 
