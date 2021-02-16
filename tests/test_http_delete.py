@@ -23,7 +23,7 @@ from conftest import INVALID_IDS
 
 # @pytest.mark.d
 @pytest.mark.delete
-@pytest.mark.run_on_empty
+@pytest.mark.run_on_empty  # necessary to run on empty because no other function to cleanup and test delete
 def test_successfully_deletes_all_when_no_bears():
   r = requests.delete(SERVICE_URL, timeout=T)
   assert r.status_code == 200
