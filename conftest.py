@@ -37,7 +37,8 @@ INVALID_BEAR_NAMES = [
   False,                  # Python special value
   0,                      # special value
   10,                     # digit as digit
-  "a"*1000                # longest personal name in the world up to beginning of 2021 was 747 chars
+  "a"*1000,               # longest personal name in the world up to beginning of 2021 was 747 chars
+  "name;DROP bears;--"    # SQL injection
 ]
 
 
@@ -60,7 +61,8 @@ INVALID_BEAR_AGES = [
   -1,                     # negative
   -1.2,                   # negative float
   1.12345678901234567890, # too high precission (not specified limit of precission)
-  10e10                   # too big value
+  10e10,                  # too big value
+  "1;DROP bears;--"       # SQL injection
 ]
 
 VALID_BEAR_TYPES = [      # by specification at /info
@@ -77,7 +79,8 @@ INVALID_BEAR_TYPES = [
   None,                   # Python special value
   0,                      # special value
   True,                   # Python special value
-  False                   # Python special value
+  False,                  # Python special value
+  "POLAR;DROP bears;--"   # SQL injection
 ]
 
 INVALID_IDS = [
@@ -91,6 +94,7 @@ INVALID_IDS = [
   True,                   # Python special value
   False,                  # Python special value
   sys.maxsize + 1         # pretends to be out-of-range number
+  "1;DROP bears;--"       # SQL injection
 ]
 
 INVALID_DATASET = [
