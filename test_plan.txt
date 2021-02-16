@@ -1,7 +1,8 @@
 Service Verification Test Plan
 
 All the verifications are already sorted in the priority of execution from Highest to Lowest. 
-One can stop test execution at any time at any stage if one have no resources (time, env, engineers) to continue. But will see the risks of other (missed) verifications.
+One can stop test execution at any time at any stage if one have no resources (time, env, engineers) to continue. 
+But will see the risks of other (missed) verifications.
 
 
 A. Preconditions (Installation):
@@ -21,8 +22,8 @@ C. Testing (Functional):
   6. Log messages during and after automatic and manual test executions have no CRIT and ERROR records (WARNING messages, if any, are acknowledged)
   7. Container RAM and CPU usage are about the same before and after tests (optional non-functional, for the case if part "D" will not be executed)
 
-D. Testing (non-Functional):
-  8. Testing (Performance (Load)) (could be started on a separate env right after PDV):
+D. Testing (non-Functional) (could be started on a separate env right after PDV):
+  8. Testing (Performance (Load)):
     * Service does not crash during 24h load test
     * Container RAM and CPU usage are about the same before and after several hours (24h) of load testing
     * Log messages have no CRIT and ERROR records (WARNING messages, if any, are acknowledged)
