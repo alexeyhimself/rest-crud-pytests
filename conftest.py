@@ -13,7 +13,7 @@ BEAR_DEFAULT_PARAMS = ["bear_type", "bear_name", "bear_age"]
 FINE_LENGTH_OF_BEAR_NAME = 10
 BEAR_AGES = range(0, 51)  # in average 25, but 50 is a maximum lifetime expectancy for bears in captivity (except GUMMY)
 T_MAX_FOR_LOAD_TEST = 1   # [seconds], maximum time to wait for high load
-T = 5                     # [seconds], timeout for requests
+T = 10                    # [seconds], timeout for requests
 A_LOT = 10000             # minimum number of bear records to expect in "flush a lot" tests
 A_FEW = 10                # minimum number of bear records to expect in "flush a few" tests
 
@@ -38,7 +38,7 @@ INVALID_BEAR_NAMES = [
   0,                      # special value
   10,                     # digit as digit
   "a"*1000,               # longest personal name in the world up to beginning of 2021 was 747 chars
-  "name;DROP bears;--"    # SQL injection
+  "name';DROP bears;--"   # SQL injection
 ]
 
 
@@ -80,7 +80,7 @@ INVALID_BEAR_TYPES = [
   0,                      # special value
   True,                   # Python special value
   False,                  # Python special value
-  "POLAR;DROP bears;--"   # SQL injection
+  "POLAR';DROP bears;--"  # SQL injection
 ]
 
 INVALID_IDS = [
@@ -140,6 +140,7 @@ def valid_bear_ages():
 @pytest.fixture
 def flush_with_data(valid_bear):
   def flush(valid_bear, how_many_bears=A_FEW):
+    threads = list()
     for i in range(0, how_many_bears):
       t = threading.Thread(
         target=requests.post,
@@ -150,7 +151,10 @@ def flush_with_data(valid_bear):
         }
       )
       t.start()
-      t.join()
+      threads.append(t)
+  
+    for each_thread in threads:
+      each_thread.join()
 
   return flush
 
