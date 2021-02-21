@@ -114,7 +114,7 @@ INVALID_DATASET = [
 
 
 @pytest.fixture
-def valid_bear(valid_bear_types, valid_bear_name, valid_bear_ages) -> dict:
+def valid_bear(valid_bear_types: list, valid_bear_name: str, valid_bear_ages: range) -> dict:
   bear_type = random.choice(valid_bear_types)
   bear_name = valid_bear_name
   bear_age = random.choice(valid_bear_ages)
