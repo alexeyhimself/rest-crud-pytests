@@ -1,5 +1,3 @@
 requests
 pytest
-#pytest-dependency
-#pytest-order
-
+pydantic

@@ -6,6 +6,9 @@ import json
 import threading
 import sys
 
+from pydantic import BaseModel
+from typing import Any, Callable
+
 
 URL = "http://0.0.0.0:8091"
 SERVICE_URL = URL + "/bear"
@@ -111,7 +114,7 @@ INVALID_DATASET = [
 
 
 @pytest.fixture
-def valid_bear(valid_bear_types, valid_bear_name, valid_bear_ages):
+def valid_bear(valid_bear_types, valid_bear_name, valid_bear_ages) -> dict:
   bear_type = random.choice(valid_bear_types)
   bear_name = valid_bear_name
   bear_age = random.choice(valid_bear_ages)
@@ -119,27 +122,27 @@ def valid_bear(valid_bear_types, valid_bear_name, valid_bear_ages):
 
 
 @pytest.fixture
-def valid_bear_types():
+def valid_bear_types() -> list:
   return VALID_BEAR_TYPES
 
 
  # Used from: https://pynative.com/python-generate-random-string
 @pytest.fixture
-def valid_bear_name():
+def valid_bear_name() -> str:
   letters = string.ascii_letters
   return ''.join(random.choice(letters) for i in range(FINE_LENGTH_OF_BEAR_NAME))
 
 
 @pytest.fixture
-def valid_bear_ages():
+def valid_bear_ages() -> range:
   return BEAR_AGES
 
 
 # Used pass parameter to fixture approach from: 
 # https://stackoverflow.com/questions/18011902/pass-a-parameter-to-a-fixture-function
 @pytest.fixture
-def flush_with_data(valid_bear):
-  def flush(valid_bear, how_many_bears=A_FEW):
+def flush_with_data(valid_bear: dict) -> Callable[[dict, int], None]:
+  def flush(valid_bear: dict, how_many_bears: int = A_FEW) -> None:
     threads = list()
     for i in range(0, how_many_bears):
       t = threading.Thread(
@@ -160,5 +163,59 @@ def flush_with_data(valid_bear):
 
 
 @pytest.fixture
-def cleanup():
+def cleanup() -> None:
   r = requests.delete(SERVICE_URL, timeout=T)
+
+
+class Bear(BaseModel):
+  bear_id: int
+  bear_name: str
+  bear_type: str
+  bear_age: float
+  
+  # used __post_init___ analog for dataclass from
+  # https://github.com/samuelcolvin/pydantic/issues/691
+  def __init__(self, **data: Any):
+    super().__init__(**data)
+    assert self.bear_type in VALID_BEAR_TYPES
+    assert self.bear_age >= BEAR_AGES[0]
+    assert self.bear_age <= BEAR_AGES[-1]
+
+
+class BearsDB:
+  def create_bear(self, bear: dict) -> str:
+    r = requests.post(SERVICE_URL, data=json.dumps(bear), timeout=T)
+    assert r.status_code == 200
+    assert r.text.isdigit() == True
+    return r.text
+
+  def read_bear(self, bear_id: int) -> dict:
+    r = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
+    assert r.status_code == 200
+    bear = json.loads(r.text)
+    assert isinstance(bear, dict) == True
+    Bear(**bear)  # data basic validation
+    return bear
+
+  def read_all_bears(self) -> list:
+    r = requests.get(SERVICE_URL, timeout=T)
+    assert r.status_code == 200
+    bears = json.loads(r.text)
+    assert isinstance(bears, list) == True
+    return bears
+
+  def update_bear(self, bear_id: int, params: dict) -> None:
+    r2 = requests.put(SERVICE_URL + "/" + str(bear_id), data=json.dumps(params), timeout=T)
+    assert r2.status_code == 200
+    assert r2.text == "OK"
+
+  def delete_bear(self, bear_id: int) -> None:
+    r = requests.delete(SERVICE_URL + "/" + str(bear_id), timeout=T)
+    assert r.status_code == 200
+    assert r.text == "OK"
+
+  def delete_all_bears(self) -> None:
+    r = requests.delete(SERVICE_URL, timeout=T)
+    assert r.status_code == 200
+    assert r.text == "OK"
+

@@ -64,6 +64,15 @@ from conftest import INVALID_BEAR_NAMES, INVALID_BEAR_AGES, INVALID_BEAR_TYPES
 from conftest import INVALID_DATASET
 
 
+from conftest import BearsDB
+
+
+class BearsDBExtended(BearsDB):
+  def update_bear_bad_request(self, bear_id, bear):
+    r = requests.put(SERVICE_URL + "/" + bear_id, data=json.dumps(bear), timeout=T)
+    assert r.status_code == 400  # must be HTTP 400 Bad Request
+
+
 #
 #  Assist function for valid data verification (part).
 # 
@@ -73,16 +82,11 @@ from conftest import INVALID_DATASET
 #  specified parameter's value is as updated.
 #
 def post_put_part_get_and_compare(valid_bear, param, value):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id = r1.text
+  bears_db = BearsDB()
+  bear_id = bears_db.create_bear(valid_bear)
   valid_param = {param: value}
-  r2 = requests.put(SERVICE_URL + "/" + str(bear_id), data=json.dumps(valid_param), timeout=T)
-  assert r2.status_code == 200
-  assert r2.text == "OK"
-  r3 = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
-  assert r3.status_code == 200
-  bear = json.loads(r3.text)
+  bears_db.update_bear(bear_id, valid_param)
+  bear = bears_db.read_bear(bear_id)
   assert bear.get(param) == value
 
 
@@ -112,12 +116,10 @@ def test_successfully_updates_bear_age_by_sending_only_that_valid_param(valid_be
 #  by sending only that particular change and checks that it got HTTP 400 response.
 #
 def post_put_part_and_get_400(valid_bear, param, value):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id = r1.text
-  valid_param = {param: value}
-  r2 = requests.put(SERVICE_URL + "/" + str(bear_id), data=json.dumps(valid_param), timeout=T)
-  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db = BearsDBExtended()
+  bear_id = bears_db.create_bear(valid_bear)
+  invalid_param = {param: value}
+  bears_db.update_bear_bad_request(bear_id, invalid_param)
 
 
 # @pytest.mark.d
@@ -145,30 +147,22 @@ def test_fails_to_update_bear_unknown_parameter_sending_only_that_invalid_param(
 
 # @pytest.mark.d
 def test_fails_to_update_bear_id_to_free_id_by_sending_only_that_param(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id1 = r1.text
-  r2 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r2.status_code == 200
-  bear_id2 = r2.text
-  r3 = requests.delete(SERVICE_URL + "/" + str(bear_id1), timeout=T)  # make bear_id1 free
-  assert r3.status_code == 200
+  bears_db = BearsDBExtended()
+  bear_id1 = bears_db.create_bear(valid_bear)
+  bear_id2 = bears_db.create_bear(valid_bear)
+  bears_db.delete_bear(bear_id1)  # make bear_id1 free
   broken_param = {"bear_id": bear_id1}
-  r4 = requests.put(SERVICE_URL + "/" + str(bear_id2), data=json.dumps(broken_param), timeout=T)
-  assert r2.status_code == 400
+  bears_db.update_bear_bad_request(bear_id2, broken_param)
 
 
 # @pytest.mark.d
 def test_fails_to_update_bear_id_to_already_by_used_id_sending_only_that_param(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id1 = r1.text
-  r2 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r2.status_code == 200
-  bear_id2 = r2.text
+  bears_db = BearsDBExtended()
+  bear_id1 = bears_db.create_bear(valid_bear)
+  bear_id2 = bears_db.create_bear(valid_bear)
   broken_param = {"bear_id": bear_id1}
-  r4 = requests.put(SERVICE_URL + "/" + str(bear_id2), data=json.dumps(broken_param), timeout=T)
-  assert r2.status_code == 400
+  bears_db.update_bear_bad_request(bear_id2, broken_param)
+
 
 #
 #  Assist function for valid data verification (whole).
@@ -179,16 +173,11 @@ def test_fails_to_update_bear_id_to_already_by_used_id_sending_only_that_param(v
 #  specified parameter's value is as updated.
 #
 def post_put_whole_get_and_compare(valid_bear, param, value):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id = r1.text
+  bears_db = BearsDB()
+  bear_id = bears_db.create_bear(valid_bear)
   valid_bear[param] = value
-  r2 = requests.put(SERVICE_URL + "/" + str(bear_id), data=json.dumps(valid_bear), timeout=T)
-  assert r2.status_code == 200
-  assert r2.text == "OK"
-  r3 = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
-  assert r3.status_code == 200
-  bear = json.loads(r3.text)
+  bears_db.update_bear(bear_id, valid_bear)
+  bear = bears_db.read_bear(bear_id)
   assert bear.get(param) == value
 
 
@@ -218,12 +207,10 @@ def test_successfully_updates_bear_age_by_sending_whole_valid_updated_bear(valid
 #  by sending whole new bear as an update and checks that it got HTTP 400 response.
 #
 def post_put_whole_and_get_400(valid_bear, param, value):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id = r1.text
-  valid_bear[param] = value
-  r2 = requests.put(SERVICE_URL + "/" + str(bear_id), data=json.dumps(valid_bear), timeout=T)
-  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db = BearsDBExtended()
+  bear_id = bears_db.create_bear(valid_bear)
+  valid_bear[param] = value  # making valid bear invalid
+  bears_db.update_bear_bad_request(bear_id, valid_bear)  # invalid bear
 
 
 # @pytest.mark.d
@@ -246,39 +233,26 @@ def test_fails_to_update_bear_age_by_sending_whole_invalid_updated_bear(valid_be
 
 # @pytest.mark.d
 def test_fails_to_update_bear_id_to_free_id_by_sending_whole_invalid_updated_bear(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id1 = r1.text
-  r2 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r2.status_code == 200
-  bear_id2 = r2.text
-  r3 = requests.delete(SERVICE_URL + "/" + str(bear_id1), timeout=T)  # make bear_id1 free
-  assert r3.status_code == 200
+  bears_db = BearsDBExtended()
+  bear_id1 = bears_db.create_bear(valid_bear)
+  bear_id2 = bears_db.create_bear(valid_bear)
+  bears_db.delete_bear(bear_id1)  # make bear_id1 free
   valid_bear["bear_id"] = bear_id1  # making bear id invalid
-  invalid_bear = valid_bear
-  r4 = requests.put(SERVICE_URL + "/" + str(bear_id2), data=json.dumps(invalid_bear), timeout=T)
-  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db.update_bear_bad_request(bear_id2, valid_bear)
 
 
 # @pytest.mark.d
 def test_fails_to_update_bear_id_to_already_by_used_id_sending_whole_invalid_updated_bear(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id1 = r1.text
-  r2 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r2.status_code == 200
-  bear_id2 = r2.text
+  bears_db = BearsDBExtended()
+  bear_id1 = bears_db.create_bear(valid_bear)
+  bear_id2 = bears_db.create_bear(valid_bear)
   valid_bear["bear_id"] = bear_id1  # making bear id invalid
-  invalid_bear = valid_bear
-  r4 = requests.put(SERVICE_URL + "/" + str(bear_id2), data=json.dumps(invalid_bear), timeout=T)
-  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db.update_bear_bad_request(bear_id2, valid_bear)
 
 
 # @pytest.mark.d
 @pytest.mark.parametrize("invalid_data", INVALID_DATASET)
 def test_fails_to_update_bear_with_broken_format_data_param(valid_bear, invalid_data):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id1 = r1.text
-  r2 = requests.put(SERVICE_URL + "/" + str(bear_id1), data=invalid_data, timeout=T)
-  assert r2.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db = BearsDBExtended()
+  bear_id = bears_db.create_bear(valid_bear)
+  bears_db.update_bear_bad_request(bear_id, invalid_data)

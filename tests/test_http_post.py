@@ -30,21 +30,27 @@ from conftest import VALID_BEAR_NAMES, VALID_BEAR_AGES, VALID_BEAR_TYPES
 from conftest import INVALID_BEAR_NAMES, INVALID_BEAR_AGES, INVALID_BEAR_TYPES
 from conftest import INVALID_DATASET
 
+from conftest import BearsDB
+
+
+class BearsDBExtended(BearsDB):
+  def create_bear_bad_request(self, bear):
+    r = requests.post(SERVICE_URL, data=json.dumps(bear), timeout=T)
+    assert r.status_code == 400  # must be HTTP 400 Bad Request
+
 
 # @pytest.mark.d
 @pytest.mark.smoke
 def test_successfully_creates_valid_bear(valid_bear):
-  r = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r.status_code == 200
-  assert r.text.isdigit() == True
+  bears_db = BearsDB()
+  bears_db.create_bear(valid_bear)
 
 
 # @pytest.mark.d
 def test_successfully_creates_duplicate_valid_bear(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  r2 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r2.status_code == 200
-  assert r2.text.isdigit() == True
+  bears_db = BearsDB()
+  bears_db.create_bear(valid_bear)
+  bears_db.create_bear(valid_bear)
 
 
 #
@@ -56,13 +62,9 @@ def test_successfully_creates_duplicate_valid_bear(valid_bear):
 #
 def post_get_and_compare(valid_bear, param, value):
   valid_bear[param] = value
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  valid_bear_id = r1.text
-  assert r1.text.isdigit() == True
-  r2 = requests.get(SERVICE_URL + "/" + str(valid_bear_id), timeout=T)
-  assert r2.status_code == 200
-  bear = json.loads(r2.text)
-  assert isinstance(bear, dict) == True
+  bears_db = BearsDB()
+  bear_id = bears_db.create_bear(valid_bear)
+  bear = bears_db.read_bear(bear_id)
   assert bear.get(param) == valid_bear.get(param)
 
 
@@ -92,8 +94,8 @@ def test_successfully_creates_bear_with_valid_bear_age(valid_bear, valid_bear_ag
 #
 def post_and_get_400(valid_bear, param, value):
   valid_bear[param] = value
-  r = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db = BearsDBExtended()
+  bears_db.create_bear_bad_request(valid_bear)
 
 
 # @pytest.mark.d
@@ -118,8 +120,8 @@ def test_fails_to_create_bear_with_invalid_bear_age(valid_bear, invalid_bear_age
 @pytest.mark.parametrize("default_param", BEAR_DEFAULT_PARAMS)
 def test_fails_to_create_bear_without_any_default_param(valid_bear, default_param):
   valid_bear.pop(default_param)
-  r = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db = BearsDBExtended()
+  bears_db.create_bear_bad_request(valid_bear)
 
 
 # @pytest.mark.d
@@ -132,13 +134,12 @@ def test_fails_to_create_bear_with_broken_format_data_param(invalid_data):
 # @pytest.mark.d
 def test_fails_to_create_bear_with_only_unknown_param():
   unknown_param = {"unknown": "param"}
-  r = requests.post(SERVICE_URL, data=json.dumps(unknown_param), timeout=T)
-  assert r.status_code == 400  # must be HTTP 400 Bad Request
+  bears_db = BearsDBExtended()
+  bears_db.create_bear_bad_request(unknown_param)
 
 
 # @pytest.mark.d
 def test_successfully_creates_bear_with_valid_params_and_unknown_param(valid_bear):
   valid_bear["unknown"] = "param"
-  r = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r.status_code == 200
-  assert r.text.isdigit() == True
+  bears_db = BearsDB()
+  bears_db.create_bear(valid_bear)

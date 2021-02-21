@@ -58,7 +58,7 @@ If you don't want to run tests then you can look at the `rest-crud-pytests/repor
 ### Overall tests report is the following:
 * `pdv`: 2 passed
 * `smoke`: 5 passed
-* `not slow and not smoke and not pdv`: 159 failed, 32 passed
+* `not slow and not smoke and not pdv`: 160 failed, 31 passed
 * `slow`: 2 passed
 
 ### Overall logs report is the following:
@@ -69,4 +69,8 @@ If you don't want to run tests then you can look at the `rest-crud-pytests/repor
 To stop running container of tested app run:
 ```
 docker stop alaska
+```
+To deactivate virtualenv in `rest-crud-pytests` folder run:
+```
+deactivate
 ```

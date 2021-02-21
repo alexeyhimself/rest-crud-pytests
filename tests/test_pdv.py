@@ -12,6 +12,7 @@ import pytest
 import requests
 
 from conftest import URL, T
+from conftest import BearsDB
 
 
 # @pytest.mark.d
@@ -25,5 +26,5 @@ def test_info_page_is_displayed():
 # @pytest.mark.d
 @pytest.mark.pdv
 def test_delete_all_works_when_no_bears():
-  r = requests.delete(SERVICE_URL, timeout=T)
-  assert r.status_code == 200
+  bears_db = BearsDB()
+  bears_db.delete_all_bears()

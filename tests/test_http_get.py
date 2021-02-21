@@ -22,11 +22,20 @@
 
 import pytest
 import requests
-import json
 import time
 
 from conftest import SERVICE_URL, T, T_MAX_FOR_LOAD_TEST, A_LOT, A_FEW
 from conftest import INVALID_IDS, URL
+
+from conftest import BearsDB
+
+
+class BearsDBExtended(BearsDB):
+  def read_bear_not_found(self, bear_id):
+    r = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
+    assert r.status_code == 404  # why returns HTTP 200, not 400 bad request or 404 not found?
+                                 # if HTTP 200, then why returns word EMPTY rather than []?
+                                 # considering this 200 as a bug for HTTP REST
 
 
 # @pytest.mark.d
@@ -37,9 +46,8 @@ def test_gets_404_when_open_page_that_does_not_exist(cleanup):
 
 # @pytest.mark.d
 def test_successfully_reads_all_bears_when_bears_not_exist(cleanup):
-  r = requests.get(SERVICE_URL, timeout=T)
-  assert r.status_code == 200
-  bears = json.loads(r.text)
+  bears_db = BearsDB()
+  bears = bears_db.read_all_bears()
   assert bears == []
 
 
@@ -47,66 +55,51 @@ def test_successfully_reads_all_bears_when_bears_not_exist(cleanup):
 @pytest.mark.smoke
 def test_successfully_reads_all_bears_when_bears_exist(valid_bear, flush_with_data):
   flush_with_data(valid_bear)
-  r2 = requests.get(SERVICE_URL, timeout=T)
-  assert r2.status_code == 200
-  bears = json.loads(r2.text)
-  assert isinstance(bears, list) == True
+  bears_db = BearsDB()
+  bears = bears_db.read_all_bears()
   assert len(bears) >= A_FEW
 
 
 # @pytest.mark.d
 @pytest.mark.slow
 @pytest.mark.performance
-def test_successfully_reads_all_bears_when_a_lot_bears_exist(valid_bear, flush_with_data):
+def test_successfully_reads_in_time_all_bears_when_a_lot_bears_exist(valid_bear, flush_with_data):
   flush_with_data(valid_bear, how_many_bears=A_LOT)
+  bears_db = BearsDB()
   time_start = time.monotonic()
-  r = requests.get(SERVICE_URL, timeout=T_MAX_FOR_LOAD_TEST)
+  bears = bears_db.read_all_bears()
   time_end = time.monotonic()
-  assert r.status_code == 200
-  bears = json.loads(r.text)
-  assert isinstance(bears, list) == True
   assert len(bears) >= A_LOT
   assert time_end - time_start < T_MAX_FOR_LOAD_TEST
-
+  
 
 # @pytest.mark.d
 @pytest.mark.parametrize("invalid_id", INVALID_IDS)
 def test_fails_to_read_bear_by_invalid_id(invalid_id):
-  r = requests.get(SERVICE_URL + "/" + str(invalid_id), timeout=T)
-  assert r.status_code == 404  # why returns HTTP 200, not 400 bad request or 404 not found?
-                               # if HTTP 200, then why returns word EMPTY rather than []?
-                               # considering this 200 as a bug for HTTP REST
+  bears_db = BearsDBExtended()
+  bears_db.read_bear_not_found(invalid_id)
 
 
 # @pytest.mark.d
 def test_fails_to_read_bear_by_valid_id_that_does_not_exist(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  assert r1.status_code == 200
-  bear_id = r1.text
-  r2 = requests.delete(SERVICE_URL + "/" + str(bear_id), timeout=T)
-  assert r2.status_code == 200
-  r3 = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
-  assert r3.status_code == 404
+  bears_db = BearsDBExtended()
+  bear_id = bears_db.create_bear(valid_bear)
+  bears_db.delete_bear(bear_id)
+  bears_db.read_bear_not_found(bear_id)
 
 
 # @pytest.mark.d
 @pytest.mark.smoke
 def test_successfully_reads_existing_bear_by_id(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  bear_id = r1.text
-  r2 = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
-  assert r2.status_code == 200
-  bear = json.loads(r2.text)
-  assert isinstance(bear, dict) == True
+  bears_db = BearsDBExtended()
+  bear_id = bears_db.create_bear(valid_bear)
+  bears_db.read_bear(bear_id)
 
 
 # @pytest.mark.d
 def test_read_json_is_the_same_as_post_json(valid_bear):
-  r1 = requests.post(SERVICE_URL, data=json.dumps(valid_bear), timeout=T)
-  bear_id = r1.text
-  r2 = requests.get(SERVICE_URL + "/" + str(bear_id), timeout=T)
-  assert r2.status_code == 200
-  bear = json.loads(r2.text)
-  assert isinstance(bear, dict) == True
+  bears_db = BearsDBExtended()
+  bear_id = bears_db.create_bear(valid_bear)
+  bear = bears_db.read_bear_not_found(bear_id)
   valid_bear["bear_id"] = bear_id
   assert bear == valid_bear
