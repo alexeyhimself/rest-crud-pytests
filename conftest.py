@@ -138,30 +138,6 @@ def valid_bear_ages() -> range:
   return BEAR_AGES
 
 
-# Used pass parameter to fixture approach from: 
-# https://stackoverflow.com/questions/18011902/pass-a-parameter-to-a-fixture-function
-@pytest.fixture
-def flush_with_data(valid_bear: dict) -> Callable[[dict, int], None]:
-  def flush(valid_bear: dict, how_many_bears: int = A_FEW) -> None:
-    threads = list()
-    for i in range(0, how_many_bears):
-      t = threading.Thread(
-        target=requests.post,
-        args=(SERVICE_URL,),
-        kwargs={
-          "data": json.dumps(valid_bear),
-          "timeout": T
-        }
-      )
-      t.start()
-      threads.append(t)
-  
-    for each_thread in threads:
-      each_thread.join()
-
-  return flush
-
-
 @pytest.fixture
 def cleanup() -> None:
   r = requests.delete(SERVICE_URL, timeout=T)
@@ -218,4 +194,21 @@ class BearsDB:
     r = requests.delete(SERVICE_URL, timeout=T)
     assert r.status_code == 200
     assert r.text == "OK"
+
+  def flud_with_bears(self, bear: dict, how_many_bears: int = A_FEW) -> None:
+    threads = list()
+    for i in range(0, how_many_bears):
+      t = threading.Thread(
+        target=requests.post,
+        args=(SERVICE_URL,),
+        kwargs={
+          "data": json.dumps(bear),
+          "timeout": T
+        }
+      )
+      t.start()
+      threads.append(t)
+  
+    for each_thread in threads:
+      each_thread.join()
 

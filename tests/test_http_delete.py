@@ -42,9 +42,9 @@ def test_successfully_deletes_all_when_no_bears(cleanup):
 # @pytest.mark.d
 @pytest.mark.delete
 @pytest.mark.smoke
-def test_successfully_deletes_all_existing_bears(valid_bear, flush_with_data):
-  flush_with_data(valid_bear)
+def test_successfully_deletes_all_existing_bears(valid_bear):
   bears_db = BearsDB()
+  bears_db.flud_with_bears(valid_bear)
   bears_db.delete_all_bears()
   bears = bears_db.read_all_bears()
   assert bears == []
@@ -80,9 +80,9 @@ def test_fails_to_delete_bear_by_invalid_id(invalid_id):
 @pytest.mark.performance
 @pytest.mark.delete
 @pytest.mark.slow
-def test_successfully_deletes_in_time_all_bears_when_a_lot_bears_exist(valid_bear, flush_with_data):
-  flush_with_data(valid_bear, how_many_bears=A_LOT)
+def test_successfully_deletes_in_time_all_bears_when_a_lot_bears_exist(valid_bear):
   bears_db = BearsDB()
+  bears_db.flud_with_bears(valid_bear, how_many_bears=A_LOT)
   time_start = time.monotonic()
   bears_db.delete_all_bears()
   time_end = time.monotonic()
